@@ -9,6 +9,7 @@ const userController = {
     register: async function (req: Request , res: Response) {
 
         const userInput: IUser = req.body;
+        // Encrypt password
         userInput.password = bcrypt.hashSync(req.body.password);
 
         // Auth e-mail not-duplicate
@@ -22,10 +23,14 @@ const userController = {
         const user = new User(userInput);
 
         try{
+
             const savedUser = await user.save();
             res.send(savedUser);
+
         } catch (error){
+
             res.status(400).send(error);
+
         }
 
     },
@@ -38,16 +43,17 @@ const userController = {
         const emailExistent = await User.findOne({ email: userInput.email });
         if(!emailExistent) return res.status(400).send('O e-mail preenchido não foi cadastrado!');
 
+        // Auth password incorrect
         const passwordCompare = await bcrypt.compare(req.body.password, `${emailExistent.password}`)
         if (!passwordCompare) return res.status(400).send('A senha está incorreta')
 
+        // Generate Token
         const token = jwt.sign({ _id: emailExistent._id, isAdmin: emailExistent.isAdmin }, `${process.env.TOKEN_SECRET}`)
 
         res.header('auth-token', token);
         res.send('Usuário Logado com Sucesso!');
 
     }
-
 }
 
 
