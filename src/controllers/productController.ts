@@ -29,7 +29,7 @@ const productController = {
 
             const getProduct = await Product.find();
 
-            const msgResponse = getProduct.length > 0 ? `Foram encontrados ${getProduct.length} Produtos` : `Nenhum Produto foi encontrado!`;
+            const msgResponse = getProduct.length > 0 ? `Foram encontrados ${ getProduct.length } Produtos` : `Nenhum Produto foi encontrado!`;
 
             res.status(200).send({ msg: msgResponse , data: getProduct });
 
@@ -89,9 +89,7 @@ const productController = {
             res.status(400).send(error);
 
         }
-
     }
 }
-
 
 export { productController };

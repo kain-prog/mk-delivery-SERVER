@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 function auth(req: any, res: Response, next: NextFunction) {
     const token = req.header('auth-token');
     if (!token) {
-        res.status(401).send('Acesso Negado!');
+        res.status(401).send('Acesso Negado! Inicie a sua sessão para visualizar esta página.');
     }
 
     try {
@@ -13,7 +13,7 @@ function auth(req: any, res: Response, next: NextFunction) {
         next();
 
     } catch (error) {
-        res.status(401).send('Acesso Negado!');
+        res.status(401).send('Acesso Negado! Inicie a sua sessão para visualizar esta página.');
     }
 }
 

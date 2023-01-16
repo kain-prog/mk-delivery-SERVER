@@ -44,17 +44,16 @@ const userController = {
         if(!emailExistent) return res.status(400).send('O e-mail preenchido não foi cadastrado!');
 
         // Auth password incorrect
-        const passwordCompare = await bcrypt.compare(req.body.password, `${emailExistent.password}`)
+        const passwordCompare = await bcrypt.compare( req.body.password, `${ emailExistent.password }`)
         if (!passwordCompare) return res.status(400).send('A senha está incorreta')
-
+ 
         // Generate Token
-        const token = jwt.sign({ _id: emailExistent._id, isAdmin: emailExistent.isAdmin }, `${process.env.TOKEN_SECRET}`)
+        const token = jwt.sign({ _id: emailExistent._id, isAdmin: emailExistent.isAdmin }, `${ process.env.TOKEN_SECRET }`)
 
         res.header('auth-token', token);
         res.send('Usuário Logado com Sucesso!');
 
     }
 }
-
 
 export { userController };
