@@ -17,4 +17,20 @@ function auth(req: any, res: Response, next: NextFunction) {
     }
 }
 
-export default auth;
+function validateToken(req: any, res: Response) {
+    const token = req.body.token;
+    if(!token) { 
+        res.status(401).send('Acesso Negado! Inicie a sua sessão para visualizar esta página.');
+    }
+
+    try {
+        const validate = jwt.verify(`${token}`, `${process.env.TOKEN_SECRET}`);
+        res.status(200).send(validate);
+
+    } catch (error) {
+        res.status(401).send('Acesso Negado! Inicie a sua sessão para visualizar esta página.');
+    }
+}
+
+
+export { auth, validateToken }
