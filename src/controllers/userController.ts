@@ -53,7 +53,7 @@ const userController = {
             const token = jwt.sign({ _id: emailExistent._id, firstname: emailExistent.firstname, lastname: emailExistent.lastname, isAdmin: emailExistent.isAdmin }, `${ process.env.TOKEN_SECRET }`)
 
             res.header('auth-token', token);
-            res.status(200).send({msg: 'Usuário Logado com Sucesso!'});
+            res.status(201).send({msg: 'Usuário Logado com Sucesso!'});
 
         } catch (error) {
             res.status(400).send(error);

@@ -13,12 +13,12 @@ function isAdmin(req: any, res: Response, next: NextFunction){
             next(); 
         }
         else{
-            res.status(401).send( 'Acesso negado! Você não tem permissão de Admin.' );
+            return res.status(401).send('Acesso negado! Você não tem permissão de Admin.')
         }
          
     } catch (error) {
 
-        res.status(401).send({ msg: 'Acesso negado! Você não tem permissão de Admin.', error });
+        res.status(400).send(error);
     
     }
 }
