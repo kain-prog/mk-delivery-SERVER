@@ -1,12 +1,14 @@
-import { Request, Response } from "express";
-import Product from "../models/Product";
-import { IProduct } from "../types/productType";
+import { Request, Response } from 'express';
+import Product from '../models/Product';
+import { IProduct } from '../types/productType';
 
 const productController = {
 
     create: async function(req: Request, res: Response){
 
         const productInput: IProduct = req.body;
+
+        productInput.image = process.env.UPLOADS + req.file!.path;
 
         const product = new Product (productInput);
 
