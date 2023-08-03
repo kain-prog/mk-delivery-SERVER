@@ -1,7 +1,8 @@
 export interface IProduct{
     image: String,
     name: String,
+    details:String,
     price: Number,
     amount: Number,
-    deletedPrice: Number,
+    type: String
 }
