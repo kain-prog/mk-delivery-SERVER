@@ -74,7 +74,7 @@ const userController = {
 
             const user = await User.findOne({ _id: req.user._id });
 
-            res.send(201).send({ msg: 'Dados do usuário logado recebido', data: user });
+            res.status(201).send({ msg: 'Dados do usuário logado recebido', data: user });
 
         } catch (error) {
             res.status(401).send(error);
