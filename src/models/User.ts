@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { IUser } from '../types/userType';
 
 const userSchema = new Schema <IUser>({
+    image: { type: String },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
     email: { type: String, required: true },
