@@ -15,17 +15,6 @@ const storage = multer.diskStorage({
     }
 });
 
-// const fileFilter = (req: Request, file: any, cb: any) => {
-//     // reject a file
-//     if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-//         cb( new Error( 'Por favor, envie uma mensagem JPEG ou PNG.' ), true );
-//     } else {
-//         cb(null, false);
-//     }
-//     // cb(null, false);
-//     // cb(null, true);
-// };
-
 const upload = multer({ storage: storage, limits: {
       fileSize: 1024 * 1024 * 5
     },

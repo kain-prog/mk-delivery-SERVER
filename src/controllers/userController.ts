@@ -59,7 +59,28 @@ const userController = {
             res.status(400).send(error);
         }
 
+    },
+
+    profile: async function(req: any, res: Response){
+        
+        const token = req.header('auth-token');
+
+        try {
+
+            if (!token) return res.status(401).send('Acesso Negado! Inicie a sua sessão para visualizar esta página.');
+
+            const userVerified = jwt.verify(`${token}`, `${process.env.TOKEN_SECRET}`);
+            req.user = userVerified;
+
+            const user = await User.findOne({ _id: req.user._id });
+
+            res.send(201).send({ msg: 'Dados do usuário logado recebido', data: user });
+
+        } catch (error) {
+            res.status(401).send(error);
+        }
+
     }
-}
+ }
 
 export { userController };
