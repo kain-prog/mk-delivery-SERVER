@@ -50,7 +50,7 @@ const userController = {
             if (!passwordCompare) return res.status(400).send('A senha está incorreta')
     
             // Generate Token
-            const token = jwt.sign({ _id: emailExistent._id, firstname: emailExistent.firstname, lastname: emailExistent.lastname, isAdmin: emailExistent.isAdmin }, `${ process.env.TOKEN_SECRET }`)
+            const token = jwt.sign([{ _id: emailExistent._id, firstname: emailExistent.firstname, lastname: emailExistent.lastname, isAdmin: emailExistent.isAdmin }], `${ process.env.TOKEN_SECRET }`)
 
             res.header('auth-token', token);
             res.status(201).send({msg: 'Usuário Logado com Sucesso!'});
@@ -74,7 +74,7 @@ const userController = {
 
             const user = await User.findOne({ _id: req.user._id });
 
-            res.status(201).send({ msg: 'Dados do usuário logado recebido', data: user });
+            res.status(201).send([{ msg: 'Dados do usuário logado recebido', data: user }]);
 
         } catch (error) {
             res.status(401).send(error);
