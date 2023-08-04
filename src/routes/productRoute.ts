@@ -23,6 +23,7 @@ const upload = multer({ storage: storage, limits: {
 
 
 router.post('/products/create', upload.single('image'), auth, isAdmin, productController.create );
+
 router.get('/products', productController.getAll );
 router.get('/products/:id', productController.getByID );
 router.put('/products/:id', auth, isAdmin, productController.updateByID );

@@ -1,13 +1,13 @@
 import express from 'express';
-import { validateToken } from '../controllers/authController';
 import { userController } from '../controllers/userController';
+import { auth }  from '../controllers/authController';
+import isAdmin from '../controllers/adminController';
 
 const router = express.Router();
 
-router.get('/user/profile', userController.profile);
-
-router.post('/register', userController.register);
-router.post('/login', userController.login);
-router.post('/tokenVerify', validateToken );
+router.get('/users', auth, isAdmin, userController.allUsers);
+router.get('/user/profile', userController.index);
+router.put('/user/profile/:id', auth, userController.put);
+router.delete('/user/profile/:id', auth, userController.destroy);
 
 module.exports = router;

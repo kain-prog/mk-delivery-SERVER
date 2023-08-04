@@ -1,67 +1,24 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
-import { IUser } from '../types/userType';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { IUser } from '../types/userType';
 
 const userController = {
 
-    register: async function (req: Request , res: Response) {
-
-        const userInput: IUser = req.body;
-        // Encrypt password
-        userInput.password = bcrypt.hashSync(req.body.password);
-
-        const user = new User(userInput);
+    allUsers: async function(req: Request, res: Response){
 
         try{
 
-            // Auth e-mail not-duplicate
-            const emailExistent = await User.findOne({ email: userInput.email });
-            if(emailExistent) return res.status(400).send('O e-mail inserido já foi cadastrado!');
-
-            // Auth tel not-duplicate
-            const telExistent = await User.findOne({ tel: userInput.tel });
-            if(telExistent) return res.status(400).send('O Telefone inserido já foi cadastrado!');
-
-            const savedUser = await user.save();
-            res.send(savedUser);
-
-        } catch (error){
-
-            res.status(400).send(error);
-
-        }
-
-    },
-
-    login: async function(req: Request, res: Response){
-
-        const userInput: IUser = req.body;
-
-        try {
+            const user = await User.find();
+            return res.status(200).send({ msg: 'Listagem de todos os usuários', data: user})
             
-            // Auth email not-existent
-            const emailExistent = await User.findOne({ email: userInput.email });
-            if(!emailExistent) return res.status(400).send('O e-mail preenchido não foi cadastrado!');
-
-            // Auth password incorrect
-            const passwordCompare = await bcrypt.compare( req.body.password, `${ emailExistent.password }`)
-            if (!passwordCompare) return res.status(400).send('A senha está incorreta')
-    
-            // Generate Token
-            const token = jwt.sign({ _id: emailExistent._id, firstname: emailExistent.firstname, lastname: emailExistent.lastname, isAdmin: emailExistent.isAdmin }, `${ process.env.TOKEN_SECRET }`)
-
-            res.header('auth-token', token);
-            res.status(201).send({msg: 'Usuário Logado com Sucesso!'});
-
-        } catch (error) {
-            res.status(400).send(error);
+        } catch (error){
+            res.status(401).send(error);
         }
 
     },
 
-    profile: async function(req: any, res: Response){
+    index: async function(req: Request | any, res: Response){
         
         const token = req.header('auth-token');
 
@@ -74,7 +31,63 @@ const userController = {
 
             const user = await User.findOne({ _id: req.user._id });
 
-            res.status(201).send([{ msg: 'Dados do usuário logado recebido', data: user }]);
+            res.status(201).send([{ msg: 'Dados do usuário logado recebido.', data: user }]);
+
+        } catch (error) {
+            res.status(401).send(error);
+        }
+
+    },
+
+    put: async function(req: Request | any, res: Response){
+
+        const userParams = req.params;
+        const userInput: IUser = req.body;
+        const userToken = req.header('auth-token');
+
+        try {
+
+            const userVerified = jwt.verify(`${userToken}`,  `${process.env.TOKEN_SECRET}`);
+            req.user = userVerified;
+
+            const userId = req.user._id;
+
+            if(userParams.id === userId || req.user.isAdmin){
+
+                await User.findByIdAndUpdate({_id: userParams.id}, userInput);
+                return res.status(204).send({ msg: 'Seus dados foram atualizados com sucesso!' });
+            }
+            else{
+                return res.status(401).send({ msg: 'Você não tem permissão para acessar esta página' });
+            }
+            
+
+        } catch (error) {
+            res.status(401).send(error);
+        }
+    },
+
+    destroy: async function(req: Request | any, res: Response){
+
+        const userParams = req.params;
+        const userToken = req.header('auth-token');
+
+        try {
+
+            const userVerified = jwt.verify(`${userToken}`,  `${process.env.TOKEN_SECRET}`);
+            req.user = userVerified;
+
+            const userId = req.user._id;
+
+            if(userParams.id === userId || req.user.isAdmin){
+
+                await User.deleteOne({_id: userParams.id});
+                return res.status(204).send({ msg: 'A sua conta foi deletada com sucesso!' });
+            }
+            else{
+                return res.status(401).send({ msg: 'Você não tem permissão para acessar esta página' });
+            }
+
 
         } catch (error) {
             res.status(401).send(error);
