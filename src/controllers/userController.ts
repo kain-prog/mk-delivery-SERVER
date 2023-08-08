@@ -56,7 +56,7 @@ const userController = {
     
             }else{
     
-                userInput.image = `http://localhost:8888/uploads/avatar/default-image.png`;
+                userInput.image = `${process.env.UPLOADS}uploads/avatar/default-image.png`;
             }
     
             userInput.password = bcrypt.hashSync(req.body.password);
