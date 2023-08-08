@@ -45,7 +45,7 @@ const userController = {
         const userParams = req.params;
         const userInput: IUser = req.body;
 
-        userInput.image ? userInput.image = process.env.UPLOADS + req.file!.path : userInput.image = '/uploads/avatar/default-image.png';
+        !!userInput.image ? userInput.image = process.env.UPLOADS + req.file!.path : userInput.image = `${process.env.UPLOADS}/uploads/avatar/default-image.png`;
         userInput.password = bcrypt.hashSync(req.body.password);
 
         const userToken = req.header('auth-token');
