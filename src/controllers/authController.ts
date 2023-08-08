@@ -40,6 +40,7 @@ async function register (req: Request , res: Response) {
     const userInput: IUser = req.body;
     // Encrypt password
     userInput.password = bcrypt.hashSync(req.body.password);
+    userInput.image = `${process.env.UPLOADS}uploads/avatar/default-image.png`;
 
     const user = new User(userInput);
 

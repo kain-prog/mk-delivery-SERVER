@@ -50,14 +50,7 @@ const userController = {
 
         try {
 
-            if(userInput.image.length > 2 || !!userInput.image){
-
-                userInput.image = process.env.UPLOADS + req.file!.path  
-    
-            }else{
-    
-                userInput.image = `${process.env.UPLOADS}uploads/avatar/default-image.png`;
-            }
+            userInput.image = userInput.image = process.env.UPLOADS + req.file!.path;
     
             userInput.password = bcrypt.hashSync(req.body.password);
 
