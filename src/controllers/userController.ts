@@ -50,7 +50,9 @@ const userController = {
 
         try {
 
-            userInput.image = userInput.image = process.env.UPLOADS + req.file!.path;
+            if(userInput.image){
+                userInput.image = process.env.UPLOADS + req.file!.path;
+            }
     
             userInput.password = bcrypt.hashSync(req.body.password);
 
