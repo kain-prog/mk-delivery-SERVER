@@ -52,15 +52,16 @@ const userController = {
 
             
             if(req.file !== undefined){
-                userInput.image = process.env.UPLOADS + req.file?.path;
+                userInput.image = process.env.UPLOADS + req.file!.path;
             }
             else{
 
-                const user = new User(userInput);
-                userInput.image = user.image;
+                // const user = new User(userInput);
+                // userInput.image = user.image;
+                userInput.image = String(process.env.DEFAULT_IMAGE);
 
             }
-                
+
             userInput.password = bcrypt.hashSync(req.body.password);
 
             const userVerified = jwt.verify(`${userToken}`, `${process.env.TOKEN_SECRET}`);
