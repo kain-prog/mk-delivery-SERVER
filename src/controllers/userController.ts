@@ -50,24 +50,20 @@ const userController = {
 
         try {
 
-            
-            if(req.file !== undefined){
-                userInput.image = process.env.UPLOADS + req.file!.path;
-            }
-            else{
-
-                // const user = new User(userInput);
-                // userInput.image = user.image;
-                userInput.image = String(process.env.DEFAULT_IMAGE);
-
-            }
-
             userInput.password = bcrypt.hashSync(req.body.password);
 
             const userVerified = jwt.verify(`${userToken}`, `${process.env.TOKEN_SECRET}`);
             const userInfo: any = userVerified;
 
             const userId = userInfo._id;
+
+            if(req.file !== undefined){
+                userInput.image = process.env.UPLOADS + req.file!.path;
+            }
+            else{
+                userInput.image = userInfo.image;
+
+            }
 
             if(userParams.id === userId || !!userInfo.isAdmin){
                 await User.findByIdAndUpdate({_id: userParams.id}, userInput);
