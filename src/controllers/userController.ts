@@ -43,6 +43,9 @@ const userController = {
 
         const userParams = req.params;
         const userInput: IUser = req.body;
+
+        userInput.image = process.env.UPLOADS + req.file!.path;
+
         const userToken = req.header('auth-token');
 
         try {
