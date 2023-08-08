@@ -45,7 +45,15 @@ const userController = {
         const userParams = req.params;
         const userInput: IUser = req.body;
 
-        !!userInput.image ? userInput.image = process.env.UPLOADS + req.file!.path : userInput.image = `${process.env.UPLOADS}/uploads/avatar/default-image.png`;
+        if(userInput.image.length > 2 || !!userInput.image){
+
+            userInput.image = process.env.UPLOADS + req.file!.path  
+
+        }else{
+
+            userInput.image = `http://localhost:8888/uploads\avatar\default-image.png`;
+        }
+
         userInput.password = bcrypt.hashSync(req.body.password);
 
         const userToken = req.header('auth-token');
