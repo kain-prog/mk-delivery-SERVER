@@ -26,7 +26,7 @@ router.post('/products/create', upload.single('image'), auth, isAdmin, productCo
 
 router.get('/products', productController.getAll );
 router.get('/products/:id', productController.getByID );
-router.put('/products/:id', auth, isAdmin, productController.updateByID );
+router.put('/products/:id', upload.single('image'), auth, isAdmin, productController.updateByID );
 router.delete('/products/:id', auth, isAdmin, productController.destroy );
 
 module.exports = router;

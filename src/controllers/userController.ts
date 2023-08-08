@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import jwt from 'jsonwebtoken';
 import { IUser } from '../types/userType';
+import bcrypt from 'bcryptjs';
 
 const userController = {
 
@@ -39,27 +40,31 @@ const userController = {
 
     },
 
-    put: async function(req: Request | any, res: Response){
+    put: async function(req: Request, res: Response){
 
         const userParams = req.params;
         const userInput: IUser = req.body;
 
         userInput.image = process.env.UPLOADS + req.file!.path;
-        
-        const user = new User(userInput);
+        userInput.password = bcrypt.hashSync(req.body.password);
 
         const userToken = req.header('auth-token');
 
         try {
 
-            const userVerified = jwt.verify(`${userToken}`,  `${process.env.TOKEN_SECRET}`);
-            req.user = userVerified;
+            const userVerified = jwt.verify(`${userToken}`, `${process.env.TOKEN_SECRET}`);
+            const userInfo: any = userVerified;
 
-            const userId = req.user._id;
+            const userId = userInfo._id;
+            console.log('USERID = ', userId)
 
-            if(userParams.id === userId || req.user.isAdmin){
-
-                await User.findByIdAndUpdate({_id: userParams.id}, user);
+            if(userParams.id === userId || !!userInfo.isAdmin){
+                console.log('teste')
+                console.log('user', userInput)
+                console.log('userID', userId)
+                console.log('userParaamsId', userParams.id)
+                const update = await User.findByIdAndUpdate({_id: userParams.id}, userInput);
+                console.log('update ', update)
                 return res.status(204).send({ msg: 'Seus dados foram atualizados com sucesso!' });
             }
             else{
@@ -78,7 +83,7 @@ const userController = {
         const userToken = req.header('auth-token');
 
         try {
-
+    
             const userVerified = jwt.verify(`${userToken}`,  `${process.env.TOKEN_SECRET}`);
             req.user = userVerified;
 
