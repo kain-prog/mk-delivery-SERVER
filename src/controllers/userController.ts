@@ -45,6 +45,8 @@ const userController = {
         const userInput: IUser = req.body;
 
         userInput.image = process.env.UPLOADS + req.file!.path;
+        
+        const user = new User(userInput);
 
         const userToken = req.header('auth-token');
 
@@ -57,7 +59,7 @@ const userController = {
 
             if(userParams.id === userId || req.user.isAdmin){
 
-                await User.findByIdAndUpdate({_id: userParams.id}, userInput);
+                await User.findByIdAndUpdate({_id: userParams.id}, user);
                 return res.status(204).send({ msg: 'Seus dados foram atualizados com sucesso!' });
             }
             else{
