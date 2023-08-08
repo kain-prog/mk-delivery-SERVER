@@ -56,15 +56,9 @@ const userController = {
             const userInfo: any = userVerified;
 
             const userId = userInfo._id;
-            console.log('USERID = ', userId)
 
             if(userParams.id === userId || !!userInfo.isAdmin){
-                console.log('teste')
-                console.log('user', userInput)
-                console.log('userID', userId)
-                console.log('userParaamsId', userParams.id)
-                const update = await User.findByIdAndUpdate({_id: userParams.id}, userInput);
-                console.log('update ', update)
+                await User.findByIdAndUpdate({_id: userParams.id}, userInput);
                 return res.status(204).send({ msg: 'Seus dados foram atualizados com sucesso!' });
             }
             else{
