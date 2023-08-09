@@ -8,10 +8,10 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './uploads/avatar/');
+        cb( null, './uploads/avatar/' );
     },
     filename: function(req, file, cb) {
-        cb(null, Date.now() + file.originalname );
+        cb( null, Date.now() + file.originalname );
     }
 });
 
@@ -22,7 +22,7 @@ const upload = multer({ storage: storage, limits: {
 });
 
 router.get('/users', auth, isAdmin, userController.allUsers);
-router.get('/user/profile', userController.index);
+router.get('/user/profile', auth, userController.index); // take user profile by id
 router.put('/user/profile/:id', upload.single('image'), auth, userController.put);
 router.delete('/user/profile/:id', auth, userController.destroy);
 

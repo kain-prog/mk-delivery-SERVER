@@ -44,8 +44,6 @@ const userController = {
 
         const userParams = req.params;
         const userInput: IUser = req.body;
-
-
         const userToken = req.header('auth-token');
 
         try {
@@ -66,7 +64,7 @@ const userController = {
             }
 
             if(userParams.id === userId || !!userInfo.isAdmin){
-                await User.findByIdAndUpdate({_id: userParams.id}, userInput);
+                await User.findByIdAndUpdate({ _id: userParams.id}, userInput );
                 return res.status(204).send({ msg: 'Seus dados foram atualizados com sucesso!' });
             }
             else{
