@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node ./server.ts"
+    "dev": "nodemon --exec ts-node ./server.ts",
+    "test": "NODE_ENV=test node --test __tests__/",
+    "test:watch": "NODE_ENV=test node --watch --test __tests__/*.test.ts",
+    "test:cov": "NODE_ENV=test --exclude ./server.ts node --experimental-test-coverage --test ./__test__/"
   },
   "keywords": [],
   "author": "",
