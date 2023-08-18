@@ -67,6 +67,19 @@ const productController = {
 
         try {
         
+            const oldProduct = await Product.findById(productParams.id);
+
+            if(!oldProduct){
+                return res.status(404).send({ msg: 'Este produto não existe!' });
+            }
+
+            if(req.file !== undefined){
+                productInput.image = process.env.UPLOADS + req.file!.path;
+            }
+            else{
+                productInput.image = oldProduct.image;
+            }
+
             await Product.findByIdAndUpdate({_id: productParams.id}, productInput);
             res.status(200).send({ msg: 'O Produto foi atualizado com sucesso!' });
 
