@@ -2,12 +2,9 @@
   "name": "back",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
-    "dev": "nodemon --exec ts-node ./server.ts",
-    "test": "NODE_ENV=test node --test __tests__/",
-    "test:watch": "NODE_ENV=test node --watch --test __tests__/*.test.ts",
-    "test:cov": "NODE_ENV=test --exclude ./server.ts node --experimental-test-coverage --test ./__test__/"
+    "dev": "nodemon --exec ts-node ./server.ts"
   },
   "keywords": [],
   "author": "",
